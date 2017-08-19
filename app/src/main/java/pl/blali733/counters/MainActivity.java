@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    //TODO: Missing toast on lost authentication due to lack of internet connection
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,6 +172,7 @@ public class MainActivity extends AppCompatActivity
             firebaseAuthWithGoogle(acct);
         } else {
             // Signed out, show unauthenticated UI.
+            Toast.makeText(MainActivity.this,R.string.AuthFail,Toast.LENGTH_SHORT).show();
             updateUI(null);
         }
     }
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, R.string.AuthFail,
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -261,7 +260,7 @@ public class MainActivity extends AppCompatActivity
     //TODO: Implement local storage.
     //TODO: Implement global sync.
     private void loadCounterElementList(){
-        counterElementList = new ArrayList<CounterElement>();
+        counterElementList = new ArrayList<>();
         if(mAuth.getCurrentUser() != null){
             //Authenticated user
 
@@ -277,8 +276,9 @@ public class MainActivity extends AppCompatActivity
         ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this,
                 R.layout.list_item,
                 counterElementList) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 if(convertView == null){
                     convertView = getLayoutInflater().inflate(R.layout.list_item, null);
                 }
