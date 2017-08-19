@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Liczniki</string>
+    <string name="AuthFail">Autoryzacja nieudana!</string>
+    <string name="GAPIFatal">Krytyczny błąd API Google</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="placeholderName">Nie połączono</string>
+    <string name="title_activity_main">Liczniki</string>
+    <string name="communicate">Udostępnianie</string>
+    <string name="log_in">Zaloguj</string>
+    <string name="log_out">Wyloguj</string>
+    <string name="send">Wyślij</string>
+    <string name="share">Udostępnij</string>
+</resources>
