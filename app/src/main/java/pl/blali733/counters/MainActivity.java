@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.loading_screen);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -112,7 +113,10 @@ public class MainActivity extends AppCompatActivity
 
         //ad:
         mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("3AF148596AC5095AAF4C56253E9DB321").build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //Ja Huawei P8
+                //.addTestDevice("02EC19A682EA307ADDFFA3FBE9AB906C") //Mama Huawei P9
+                .build();
         mAdView.loadAd(adRequest);
 
         //Content List:
