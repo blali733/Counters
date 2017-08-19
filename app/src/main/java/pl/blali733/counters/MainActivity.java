@@ -65,9 +65,13 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
 
+    //TODO: Missing toast on lost authentication due to lack of internet connection
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Log.i(TAG,"Main activity start");
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity
                 .build();
         //Firebase auth:
         mAuth = FirebaseAuth.getInstance();
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
