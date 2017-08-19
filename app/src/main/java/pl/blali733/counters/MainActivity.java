@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity
         //ad:
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //Ja Huawei P8
-                //.addTestDevice("02EC19A682EA307ADDFFA3FBE9AB906C") //Mama Huawei P9
+                .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8
+                //.addTestDevice("02EC19A682EA307ADDFFA3FBE9AB906C") //Moms Huawei P9
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        Toast.makeText(MainActivity.this,R.string.GAPIFatal,Toast.LENGTH_LONG).show();
     }
 
     @Override
