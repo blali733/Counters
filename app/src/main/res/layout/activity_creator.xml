@@ -4,7 +4,17 @@
     android:layout_height="match_parent"
     android:theme="@style/AppTheme.NoActionBar">
     <TextView
+        android:id="@+id/tlabel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Testing"/>
+        android:layout_height="15dp"
+        android:text="@string/label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+    <EditText
+        android:id="@+id/ilabel"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tlabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

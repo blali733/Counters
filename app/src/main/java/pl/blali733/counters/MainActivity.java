@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
 
+        //TODO solve problem of multiple clones on pressing back
         switch(id){
             case R.id.log_in:{
                 signIn();
@@ -253,6 +254,8 @@ public class MainActivity extends AppCompatActivity
             }break;
             case R.id.nav_own:{
                 //TODO Kinda hackish but it works - for now
+                if(frameLayoutCtx.getChildAt(0) != null)
+                    frameLayoutCtx.removeAllViews();
                 getLayoutInflater().inflate(R.layout.activity_list, frameLayoutCtx);
                 if(!listActLoaded)
                     initListAct();
