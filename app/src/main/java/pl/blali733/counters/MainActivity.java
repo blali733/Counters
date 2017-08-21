@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,16 +54,16 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClient;
-    private FirebaseAuth mAuth;
     private TextView nameText;
     private TextView mailText;
     private ImageView userImage;
-    private NavigationView navigationViewCtx;
-    private AdView mAdView;
-    private List<CounterElement> counterElementList;
-    private ListView list;
     private DatabaseReference mDatabase;
-    private DbStor locStor;
+
+    DrawerLayout drawerLayoutCtx;
+    Toolbar toolbarCtx;
+    FrameLayout frameLayoutCtx;
+    NavigationView navigationViewCtx;
+    FirebaseAuth mAuth;
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i(TAG,"Main activity start");
+        Log.i(TAG,"Main activity drawn");
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -87,49 +88,31 @@ public class MainActivity extends AppCompatActivity
                 .build();
         //Firebase auth:
         mAuth = FirebaseAuth.getInstance();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: Implement creation of counter
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        toolbarCtx = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbarCtx);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        frameLayoutCtx = (FrameLayout) findViewById(R.id.ContentFrame) ;
+
+        drawerLayoutCtx = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawerLayoutCtx, toolbarCtx, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayoutCtx.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
+        navigationViewCtx = (NavigationView) findViewById(R.id.nav_view);
+        navigationViewCtx.setNavigationItemSelectedListener(this);
+        View headerView = navigationViewCtx.getHeaderView(0);
         nameText = (TextView)headerView.findViewById(R.id.nameText);
         mailText = (TextView)headerView.findViewById(R.id.mailText);
         userImage = (ImageView)headerView.findViewById(R.id.pic);
-        navigationViewCtx = navigationView;
-
-        //ad:
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8
-                //.addTestDevice("02EC19A682EA307ADDFFA3FBE9AB906C") //Moms Huawei P9
-                .build();
-        mAdView.loadAd(adRequest);
-
-        //Content List:
-        locStor = new DbStor(getApplicationContext());
-        loadCounterElementList();
-        loadListView();
-        addClickListener();
 
         //Db hook:
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //Dumb buggy shit TODO rework
+        navigationViewCtx.setCheckedItem(R.id.nav_own);
+        navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
     }
 
     @Override
@@ -234,9 +217,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayoutCtx.isDrawerOpen(GravityCompat.START)) {
+            drawerLayoutCtx.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -248,71 +230,29 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        //to prevent current item select over and over
+        if (item.isChecked()){
+            drawerLayoutCtx.closeDrawer(GravityCompat.START);
+            return false;
+        }
+
         if (id == R.id.log_in) {
             signIn();
         } else if (id == R.id.log_out) {
             signOut();
+        } else if (id == R.id.nav_own) {
+            startActivity(new Intent(getApplicationContext(),ListActivity.class));
+        } else if (id == R.id.nav_shared) {
+            //TODO: Implement shared counters list.
         } else if (id == R.id.nav_share) {
             //TODO: Implement counter sharing.
         } else if (id == R.id.nav_send) {
             //TODO: Implement sending counter results.
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayoutCtx.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    //TODO: Implement local initial sync.
-    private void loadCounterElementList(){
-        String curUser;
-        if(mAuth.getCurrentUser()!=null)
-            curUser = mAuth.getCurrentUser().getEmail();
-        else
-            curUser = "localhost";
-        counterElementList = locStor.displayList(curUser);
 
-    }
-
-    private void loadListView(){
-        list = (ListView)findViewById(R.id.list_view);
-
-        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this,
-                R.layout.list_item,
-                counterElementList) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                if(convertView == null){
-                    convertView = getLayoutInflater().inflate(R.layout.list_item, null);
-                }
-
-                TextView label = (TextView)convertView.findViewById(R.id.item_label);
-                label.setText(counterElementList.get(position).getLabel());
-
-                TextView value = (TextView)convertView.findViewById(R.id.item_value);
-                if(counterElementList.get(position).isMixed()){
-                    value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
-                }else{
-                    value.setText(counterElementList.get(position).getV1());
-                }
-
-                return convertView;
-            }
-        };
-
-        list.setAdapter(adapter);
-    }
-
-    private void addClickListener(){
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos,
-                                    long id) {
-//                Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
-//                AppsListActivity.this.startActivity(i);
-                //load counter edit layout
-            }
-        });
-    }
 }

@@ -3,14 +3,28 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/log_in"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/log_in" />
+            android:id="@+id/nav_own"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/cown" />
         <item
-            android:id="@+id/log_out"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/log_out" />
+            android:id="@+id/nav_shared"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/cshared" />
     </group>
+
+
+    <item android:title="@string/account">
+        <menu>
+            <item
+                android:id="@+id/log_in"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/log_in" />
+            <item
+                android:id="@+id/log_out"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/log_out" />
+        </menu>
+    </item>
 
     <item android:title="@string/communicate">
         <menu>

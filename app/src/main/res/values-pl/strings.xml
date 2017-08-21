@@ -11,4 +11,7 @@
     <string name="log_out">Wyloguj</string>
     <string name="send">Wyślij</string>
     <string name="share">Udostępnij</string>
+    <string name="cown">Moje</string>
+    <string name="cshared">Udostępnione dla mnie</string>
+    <string name="account">Konto</string>
 </resources>

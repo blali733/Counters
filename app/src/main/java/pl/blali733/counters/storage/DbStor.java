@@ -15,7 +15,7 @@ import pl.blali733.counters.CounterElement;
 import pl.blali733.counters.storage.data.LocalElement;
 
 public class DbStor extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String DB_NAME = "Counters";
     private static final String TABLE = "counters";
 
@@ -34,7 +34,7 @@ public class DbStor extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE "+TABLE+"("+KEY_ID+" INTEGER PRIMARY KEY,"+KEY_AUTH+" TEXT,"+KEY_LABEL+" TEXT,"+KEY_V1+" INTEGER,"+KEY_V2+" INTEGER,"+KEY_MIXED+" TEXT,"+KEY_DIRTY+" TEXT)";
+        String CREATE_TABLE = "CREATE TABLE " + TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_AUTH + " TEXT," + KEY_LABEL + " TEXT," + KEY_V1 + " INTEGER," + KEY_V2 + " INTEGER," + KEY_MIXED + " TEXT," + KEY_DIRTY + " TEXT );";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -84,6 +84,7 @@ public class DbStor extends SQLiteOpenHelper {
                     cursor.getString(6));
             cursor.close();
         }
+        db.close();
         // return contact
         return cElem;
     }
@@ -95,6 +96,7 @@ public class DbStor extends SQLiteOpenHelper {
         int count;
         count = cursor.getCount();
         cursor.close();
+        db.close();
         // return count
         return count;
     }
@@ -124,9 +126,9 @@ public class DbStor extends SQLiteOpenHelper {
                 new String[] { String.valueOf(localElement.getId()) });
         db.close();
     }
-    //TODO: Add list getter
+
     public List<CounterElement> displayList(String auth){
-        String countQuery = "SELECT  * FROM " + TABLE+" WHERE "+KEY_AUTH+" LIKE "+auth;
+        String countQuery = "SELECT  * FROM " + TABLE+" WHERE "+KEY_AUTH+" LIKE '"+auth+"'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         List<CounterElement> list = new ArrayList<>();
@@ -140,6 +142,7 @@ public class DbStor extends SQLiteOpenHelper {
             list.add(elem);
         }
         cursor.close();
+        db.close();
         return list;
     }
 }
