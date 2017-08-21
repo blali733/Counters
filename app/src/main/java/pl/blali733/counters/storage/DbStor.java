@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import pl.blali733.counters.CounterElement;
 import pl.blali733.counters.storage.data.LocalElement;
 
 public class DbStor extends SQLiteOpenHelper {
@@ -61,24 +65,25 @@ public class DbStor extends SQLiteOpenHelper {
         db.close();
     }
 
-    public LocalElement getLocalElement(int id) {
+    public LocalElement getLocalElement(int id) throws NullPointerException{
         SQLiteDatabase db = this.getReadableDatabase();
-
+        LocalElement cElem = null;
         Cursor cursor = db.query(TABLE, new String[] {
                         KEY_ID, KEY_AUTH, KEY_LABEL, KEY_V1, KEY_V2, KEY_MIXED, KEY_DIRTY
                 }, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
+        if (cursor != null) {
             cursor.moveToFirst();
-
-        LocalElement cElem = new LocalElement(
-                Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1),
-                cursor.getString(2),
-                Integer.parseInt(cursor.getString(3)),
-                Integer.parseInt(cursor.getString(4)),
-                cursor.getString(5),
-                cursor.getString(6));
+            cElem = new LocalElement(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    Integer.parseInt(cursor.getString(3)),
+                    Integer.parseInt(cursor.getString(4)),
+                    cursor.getString(5),
+                    cursor.getString(6));
+            cursor.close();
+        }
         // return contact
         return cElem;
     }
@@ -87,9 +92,11 @@ public class DbStor extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-
+        int count;
+        count = cursor.getCount();
+        cursor.close();
         // return count
-        return cursor.getCount();
+        return count;
     }
 
     public int updateLocalElement(LocalElement localElement) {
@@ -118,4 +125,21 @@ public class DbStor extends SQLiteOpenHelper {
         db.close();
     }
     //TODO: Add list getter
+    public List<CounterElement> displayList(String auth){
+        String countQuery = "SELECT  * FROM " + TABLE+" WHERE "+KEY_AUTH+" LIKE "+auth;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        List<CounterElement> list = new ArrayList<>();
+        CounterElement elem;
+        while(cursor.moveToNext()){
+            elem = new CounterElement();
+            elem.setLabel(cursor.getString(1));
+            elem.setV1(Integer.parseInt(cursor.getString(2)));
+            elem.setV2(Integer.parseInt(cursor.getString(3)));
+            elem.setMixed(Boolean.parseBoolean(cursor.getString(4)));
+            list.add(elem);
+        }
+        cursor.close();
+        return list;
+    }
 }

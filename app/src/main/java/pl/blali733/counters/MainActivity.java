@@ -44,10 +44,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import pl.blali733.counters.storage.LocalStorage;
+import pl.blali733.counters.storage.DbStor;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     private List<CounterElement> counterElementList;
     private ListView list;
     private DatabaseReference mDatabase;
-    private LocalStorage locStor;
+    private DbStor locStor;
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -124,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         mAdView.loadAd(adRequest);
 
         //Content List:
-        locStor = new LocalStorage();
+        locStor = new DbStor(getApplicationContext());
         loadCounterElementList();
         loadListView();
         addClickListener();
@@ -266,7 +265,12 @@ public class MainActivity extends AppCompatActivity
 
     //TODO: Implement local initial sync.
     private void loadCounterElementList(){
-        counterElementList = locStor.elementList();
+        String curUser;
+        if(mAuth.getCurrentUser()!=null)
+            curUser = mAuth.getCurrentUser().getEmail();
+        else
+            curUser = "localhost";
+        counterElementList = locStor.displayList(curUser);
 
     }
 
@@ -284,13 +288,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 TextView label = (TextView)convertView.findViewById(R.id.item_label);
-                label.setText(counterElementList.get(position).label);
+                label.setText(counterElementList.get(position).getLabel());
 
                 TextView value = (TextView)convertView.findViewById(R.id.item_value);
-                if(counterElementList.get(position).mixed){
-                    value.setText(counterElementList.get(position).v1+" / "+counterElementList.get(position).v2);
+                if(counterElementList.get(position).isMixed()){
+                    value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
                 }else{
-                    value.setText(counterElementList.get(position).v1);
+                    value.setText(counterElementList.get(position).getV1());
                 }
 
                 return convertView;
