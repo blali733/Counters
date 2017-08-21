@@ -117,10 +117,10 @@ public class MainActivity extends AppCompatActivity
         //Db hook:
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //Dumb buggy shit TODO rework
-        navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
-        //if (savedInstanceState == null) this.onNavigationItemSelected(navigationViewCtx.getMenu().findItem(R.id.nav_own));
-        navigationViewCtx.setCheckedItem(R.id.nav_own);
+        if(this.getLocalClassName().equals("MainActivity")){
+            navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
+            navigationViewCtx.setCheckedItem(R.id.nav_own);
+        }
     }
 
     @Override
