@@ -47,6 +47,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.blali733.counters.storage.LocalStorage;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener{
@@ -61,10 +63,12 @@ public class MainActivity extends AppCompatActivity
     private List<CounterElement> counterElementList;
     private ListView list;
     private DatabaseReference mDatabase;
+    private LocalStorage locStor;
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
 
+    //TODO: Implement global sync.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity
         mAdView.loadAd(adRequest);
 
         //Content List:
+        locStor = new LocalStorage();
         loadCounterElementList();
         loadListView();
         addClickListener();
@@ -189,6 +194,7 @@ public class MainActivity extends AppCompatActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            //TODO: Create data migration popup.
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -258,17 +264,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //TODO: Implement local storage.
-    //TODO: Implement global sync.
+    //TODO: Implement local initial sync.
     private void loadCounterElementList(){
-        counterElementList = new ArrayList<>();
-        if(mAuth.getCurrentUser() != null){
-            //Authenticated user
+        counterElementList = locStor.elementList();
 
-        }else{
-            //Local storage:
-
-        }
     }
 
     private void loadListView(){
