@@ -236,18 +236,26 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
 
-        if (id == R.id.log_in) {
-            signIn();
-        } else if (id == R.id.log_out) {
-            signOut();
-        } else if (id == R.id.nav_own) {
-            startActivity(new Intent(getApplicationContext(),ListActivity.class));
-        } else if (id == R.id.nav_shared) {
-            //TODO: Implement shared counters list.
-        } else if (id == R.id.nav_share) {
-            //TODO: Implement counter sharing.
-        } else if (id == R.id.nav_send) {
-            //TODO: Implement sending counter results.
+        switch(id){
+            case R.id.log_in:{
+                signIn();
+            }break;
+            case R.id.log_out:{
+                signOut();
+            }break;
+            case R.id.nav_own:{
+                //TODO probably worth putting in singleton
+                startActivity(new Intent(getApplicationContext(),ListActivity.class));
+            }break;
+            case R.id.nav_shared:{
+                //TODO: Implement shared counters list.
+            }break;
+            case R.id.nav_share:{
+                //TODO: Implement counter sharing.
+            }break;
+            case R.id.nav_send:{
+                //TODO: Implement sending counter results.
+            }break;
         }
 
         drawerLayoutCtx.closeDrawer(GravityCompat.START);
