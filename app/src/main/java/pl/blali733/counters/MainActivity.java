@@ -53,6 +53,13 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener{
 
+    private boolean listActLoaded = false;
+
+    private ListView list;
+    private List<CounterElement> counterElementList;
+    private DbStor locStor;
+    private AdView mAdView;
+
     private GoogleApiClient mGoogleApiClient;
     private TextView nameText;
     private TextView mailText;
@@ -111,8 +118,9 @@ public class MainActivity extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //Dumb buggy shit TODO rework
-        navigationViewCtx.setCheckedItem(R.id.nav_own);
         navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
+        //if (savedInstanceState == null) this.onNavigationItemSelected(navigationViewCtx.getMenu().findItem(R.id.nav_own));
+        navigationViewCtx.setCheckedItem(R.id.nav_own);
     }
 
     @Override
@@ -244,8 +252,11 @@ public class MainActivity extends AppCompatActivity
                 signOut();
             }break;
             case R.id.nav_own:{
-                //TODO probably worth putting in singleton
-                startActivity(new Intent(getApplicationContext(),ListActivity.class));
+                //TODO Kinda hackish but it works - for now
+                getLayoutInflater().inflate(R.layout.activity_list, frameLayoutCtx);
+                if(!listActLoaded)
+                    initListAct();
+                Log.i(TAG,"ListActivity content drawn");
             }break;
             case R.id.nav_shared:{
                 //TODO: Implement shared counters list.
@@ -263,4 +274,82 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void loadCounterElementList(){
+        String curUser;
+        if(mAuth.getCurrentUser()!=null)
+            curUser = mAuth.getCurrentUser().getEmail();
+        else
+            curUser = "localhost";
+        counterElementList = locStor.displayList(curUser);
+    }
+
+    private void loadListView(){
+        list = (ListView)findViewById(R.id.list_view);
+
+        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this,
+                R.layout.list_item,
+                counterElementList) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                if(convertView == null){
+                    convertView = getLayoutInflater().inflate(R.layout.list_item, null);
+                }
+
+                TextView label = (TextView)convertView.findViewById(R.id.item_label);
+                label.setText(counterElementList.get(position).getLabel());
+
+                TextView value = (TextView)convertView.findViewById(R.id.item_value);
+                if(counterElementList.get(position).isMixed()){
+                    value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
+                }else{
+                    value.setText(counterElementList.get(position).getV1());
+                }
+
+                return convertView;
+            }
+        };
+
+        list.setAdapter(adapter);
+    }
+
+    private void addClickListener(){
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> av, View v, int pos,
+                                    long id) {
+//                Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
+//                AppsListActivity.this.startActivity(i);
+                //load counter edit layout
+            }
+        });
+    }
+
+    private void addCounter(){
+        startActivity(new Intent(getApplicationContext(),CreatorActivity.class));
+    }
+
+    public void initListAct(){
+        listActLoaded = true;
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCounter();
+            }
+        });
+        //Firebase auth:
+        //ad:
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8 Lite
+                .build();
+        mAdView.loadAd(adRequest);
+
+        //Content List:
+        locStor = new DbStor(this);
+        loadCounterElementList();
+        loadListView();
+        addClickListener();
+    }
 }

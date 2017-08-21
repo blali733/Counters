@@ -8,6 +8,6 @@ public class CreatorActivity extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_creator);
+        getLayoutInflater().inflate(R.layout.activity_creator,frameLayoutCtx);
     }
 }
