@@ -49,6 +49,13 @@ import java.util.List;
 
 import pl.blali733.counters.storage.DbStor;
 
+/**
+ * Class servicing MainActivity
+ *
+ * @author blali733
+ * @version 0.2
+ * @since 0.1
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener{
@@ -75,6 +82,11 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
 
+    /**
+     * Method responsible for creation of activity.
+     * @param savedInstanceState saved instance state.
+     * @since 0.1
+     */
     //TODO: Implement global sync.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +135,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method responsible for triggering view update on each start of activity
+     *
+     * @since 0.1
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -132,11 +149,21 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Sign in method
+     *
+     * @since 0.1
+     */
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     * Sign out method
+     *
+     * @since 0.1
+     */
     private void signOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
@@ -148,6 +175,12 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
