@@ -14,4 +14,9 @@
     <string name="cown">Moje</string>
     <string name="cshared">Udostępnione dla mnie</string>
     <string name="account">Konto</string>
+    <string name="label">Nazwa licznika:</string>
+    <string name="multiVal">Licznik pojedynkowy?</string>
+    <string name="create">Stwórz nowy licznik:</string>
+    <string name="createConfirm">Utwórz</string>
+    <string name="labelHint">Nazwa licznika.</string>
 </resources>

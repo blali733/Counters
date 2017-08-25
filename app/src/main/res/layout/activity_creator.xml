@@ -1,20 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
     android:theme="@style/AppTheme.NoActionBar">
+
     <TextView
-        android:id="@+id/tlabel"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="wrap_content"
+        android:text="@string/create"
+        android:textStyle="bold|italic"
+        android:textSize="10pt"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/label"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:textAlignment="center" />
+
     <EditText
         android:id="@+id/ilabel"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/tlabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"
+        android:inputType="text"
+        android:hint="@string/labelHint"/>
+
+    <Switch
+        android:id="@+id/mVal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/multiVal"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"/>
+
+    <FrameLayout
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/createConfirm"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

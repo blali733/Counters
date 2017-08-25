@@ -69,4 +69,12 @@ public class LocalElement {
         this.mixed = mixed;
         this.dirty = dirty;
     }
+
+    public LocalElement(String label, int v1, int v2, String mixed) {
+        this.label = label;
+        this.v1 = v1;
+        this.v2 = v2;
+        this.mixed = mixed;
+        this.dirty = "true";
+    }
 }

@@ -135,10 +135,10 @@ public class DbStor extends SQLiteOpenHelper {
         CounterElement elem;
         while(cursor.moveToNext()){
             elem = new CounterElement();
-            elem.setLabel(cursor.getString(1));
-            elem.setV1(Integer.parseInt(cursor.getString(2)));
-            elem.setV2(Integer.parseInt(cursor.getString(3)));
-            elem.setMixed(Boolean.parseBoolean(cursor.getString(4)));
+            elem.setLabel(cursor.getString(2));
+            elem.setV1(Integer.parseInt(cursor.getString(3)));
+            elem.setV2(Integer.parseInt(cursor.getString(4)));
+            elem.setMixed(Boolean.parseBoolean(cursor.getString(5)));
             list.add(elem);
         }
         cursor.close();

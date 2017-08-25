@@ -3,6 +3,7 @@ package pl.blali733.counters;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -40,6 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import pl.blali733.counters.events.AuthFragment;
 import pl.blali733.counters.storage.data.CounterElement;
 import pl.blali733.counters.storage.DbStor;
 
@@ -59,11 +61,11 @@ public class MainActivity extends AppCompatActivity
     private TextView mailText;
     private ImageView userImage;
     private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     DrawerLayout drawerLayoutCtx;
     Toolbar toolbarCtx;
     NavigationView navigationViewCtx;
-    FirebaseAuth mAuth;
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         drawerLayoutCtx = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayoutCtx, toolbarCtx, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayoutCtx.setDrawerListener(toggle);
+        drawerLayoutCtx.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationViewCtx = findViewById(R.id.nav_view);
@@ -113,10 +115,6 @@ public class MainActivity extends AppCompatActivity
         //Db hook:
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-//        if(this.getLocalClassName().equals("MainActivity")){
-//            navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
-//            navigationViewCtx.setCheckedItem(R.id.nav_own);
-//        }
         if (findViewById(R.id.ContentFrame) != null) {
 
             // However, if we're being restored from a previous state,
@@ -254,6 +252,9 @@ public class MainActivity extends AppCompatActivity
             mMenu.findItem(R.id.log_in).setVisible(true);
             mMenu.findItem(R.id.log_out).setVisible(false);
         }
+        AuthFragment frag = (AuthFragment) getSupportFragmentManager().findFragmentById(R.id.ContentFrame);
+        if(frag != null)
+            frag.onAuthChange();
     }
 
     /**

@@ -20,10 +20,12 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import pl.blali733.counters.events.AuthFragment;
+import pl.blali733.counters.events.interfaces.AuthorityChange;
 import pl.blali733.counters.storage.data.CounterElement;
 import pl.blali733.counters.storage.DbStor;
 
-public class ListFragment extends Fragment {
+public class ListFragment extends AuthFragment{
 
     private ListView list;
     private List<CounterElement> counterElementList;
@@ -34,7 +36,7 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_list, container, false);
+        return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
     @Override
@@ -63,6 +65,19 @@ public class ListFragment extends Fragment {
         addClickListener();
     }
 
+    @Override
+    public void onAuthChange() {
+        loadCounterElementList();
+        loadListView();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadCounterElementList();
+        loadListView();
+    }
+
     private void loadCounterElementList(){
         String curUser;
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -74,7 +89,7 @@ public class ListFragment extends Fragment {
     }
 
     private void loadListView(){
-        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this.getContext(),
+        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(getActivity(),
                 R.layout.list_item,
                 counterElementList) {
             @NonNull
@@ -89,9 +104,9 @@ public class ListFragment extends Fragment {
 
                 TextView value = convertView.findViewById(R.id.item_value);
                 if(counterElementList.get(position).isMixed()){
-                    value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
+                    value.setText(Integer.toString(counterElementList.get(position).getV1())+" / "+Integer.toString(counterElementList.get(position).getV2()));
                 }else{
-                    value.setText(counterElementList.get(position).getV1());
+                    value.setText(Integer.toString(counterElementList.get(position).getV1()));
                 }
 
                 return convertView;

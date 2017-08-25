@@ -25,4 +25,8 @@
     <string name="cown">My own</string>
     <string name="cshared">Shared with me</string>
     <string name="account">Account</string>
+    <string name="multiVal">Use versus counter?</string>
+    <string name="create">Create new counter:</string>
+    <string name="createConfirm">Create</string>
+    <string name="labelHint">Counter name.</string>
 </resources>
