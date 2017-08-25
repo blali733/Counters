@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import pl.blali733.counters.storage.data.CounterElement;
 import pl.blali733.counters.storage.DbStor;
 
 public class ListFragment extends Fragment {
@@ -85,10 +84,10 @@ public class ListFragment extends Fragment {
                     convertView = getLayoutInflater().inflate(R.layout.list_item, null);
                 }
 
-                TextView label = (TextView)convertView.findViewById(R.id.item_label);
+                TextView label = convertView.findViewById(R.id.item_label);
                 label.setText(counterElementList.get(position).getLabel());
 
-                TextView value = (TextView)convertView.findViewById(R.id.item_value);
+                TextView value = convertView.findViewById(R.id.item_value);
                 if(counterElementList.get(position).isMixed()){
                     value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
                 }else{

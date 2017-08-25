@@ -1,5 +1,5 @@
 /**
- * Package for activities
+ * Package for data storage templates.
  *
  * @author blali733
  * @version 0.2

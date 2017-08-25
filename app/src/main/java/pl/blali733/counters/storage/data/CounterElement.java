@@ -1,4 +1,4 @@
-package pl.blali733.counters;
+package pl.blali733.counters.storage.data;
 
 public class CounterElement {
     private String label;

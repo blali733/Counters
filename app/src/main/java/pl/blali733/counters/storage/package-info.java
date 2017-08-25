@@ -1,5 +1,5 @@
 /**
- * Package for activities
+ * Package for storage providing services.
  *
  * @author blali733
  * @version 0.2

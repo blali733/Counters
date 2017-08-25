@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.blali733.counters.CounterElement;
+import pl.blali733.counters.storage.data.CounterElement;
 import pl.blali733.counters.storage.data.LocalElement;
 
 public class DbStor extends SQLiteOpenHelper {
