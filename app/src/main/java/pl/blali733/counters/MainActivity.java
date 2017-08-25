@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity
 
     DrawerLayout drawerLayoutCtx;
     Toolbar toolbarCtx;
-    FrameLayout frameLayoutCtx;
     NavigationView navigationViewCtx;
     FirebaseAuth mAuth;
 
@@ -111,8 +110,6 @@ public class MainActivity extends AppCompatActivity
         toolbarCtx = findViewById(R.id.toolbar);
         setSupportActionBar(toolbarCtx);
 
-        frameLayoutCtx = findViewById(R.id.ContentFrame) ;
-
         drawerLayoutCtx = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayoutCtx, toolbarCtx, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -129,8 +126,25 @@ public class MainActivity extends AppCompatActivity
         //Db hook:
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        if(this.getLocalClassName().equals("MainActivity")){
-            navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
+//        if(this.getLocalClassName().equals("MainActivity")){
+//            navigationViewCtx.getMenu().performIdentifierAction(R.id.nav_own, 0);
+//            navigationViewCtx.setCheckedItem(R.id.nav_own);
+//        }
+        if (findViewById(R.id.ContentFrame) != null) {
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            ListFragment frag = new ListFragment();
+            frag.setArguments(getIntent().getExtras());
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.ContentFrame, frag)
+                    .commit();
             navigationViewCtx.setCheckedItem(R.id.nav_own);
         }
     }
@@ -309,12 +323,7 @@ public class MainActivity extends AppCompatActivity
             }break;
             case R.id.nav_own:{
                 //TODO Kinda hackish but it works - for now
-                if(frameLayoutCtx.getChildAt(0) != null)
-                    frameLayoutCtx.removeAllViews();
-                getLayoutInflater().inflate(R.layout.activity_list, frameLayoutCtx);
-                if(!listActLoaded)
-                    initListAct();
-                Log.i(TAG,"ListActivity content drawn");
+//
             }break;
             case R.id.nav_shared:{
                 //TODO: Implement shared counters list.
@@ -329,85 +338,5 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayoutCtx.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private void loadCounterElementList(){
-        String curUser;
-        if(mAuth.getCurrentUser()!=null)
-            curUser = mAuth.getCurrentUser().getEmail();
-        else
-            curUser = "localhost";
-        counterElementList = locStor.displayList(curUser);
-    }
-
-    private void loadListView(){
-        list = findViewById(R.id.list_view);
-
-        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this,
-                R.layout.list_item,
-                counterElementList) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                if(convertView == null){
-                    convertView = getLayoutInflater().inflate(R.layout.list_item, null);
-                }
-
-                TextView label = convertView.findViewById(R.id.item_label);
-                label.setText(counterElementList.get(position).getLabel());
-
-                TextView value = convertView.findViewById(R.id.item_value);
-                if(counterElementList.get(position).isMixed()){
-                    value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
-                }else{
-                    value.setText(counterElementList.get(position).getV1());
-                }
-
-                return convertView;
-            }
-        };
-
-        list.setAdapter(adapter);
-    }
-
-    private void addClickListener(){
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> av, View v, int pos,
-                                    long id) {
-//                Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
-//                AppsListActivity.this.startActivity(i);
-                //load counter edit layout
-            }
-        });
-    }
-
-    private void addCounter(){
-        startActivity(new Intent(getApplicationContext(),CreatorActivity.class));
-    }
-
-    public void initListAct(){
-        listActLoaded = true;
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addCounter();
-            }
-        });
-        //Firebase auth:
-        //ad:
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8 Lite
-                .build();
-        mAdView.loadAd(adRequest);
-
-        //Content List:
-        locStor = new DbStor(this);
-        loadCounterElementList();
-        loadListView();
-        addClickListener();
     }
 }

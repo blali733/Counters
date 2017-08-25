@@ -26,7 +26,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreatorActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ListActivity" android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

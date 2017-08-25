@@ -3,9 +3,12 @@ package pl.blali733.counters;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,38 +24,41 @@ import java.util.List;
 
 import pl.blali733.counters.storage.DbStor;
 
-public class ListActivity extends MainActivity {
+public class ListFragment extends Fragment {
 
     private ListView list;
     private List<CounterElement> counterElementList;
     private DbStor locStor;
-    private AdView mAdView;
 
     private static final String TAG = "ListView";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_list, frameLayoutCtx);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
         Log.i(TAG,"content drawn");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addCounter();
             }
         });
-        //Firebase auth:
         //ad:
-        mAdView = (AdView) findViewById(R.id.adView);
+        AdView mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8 Lite
                 .build();
         mAdView.loadAd(adRequest);
 
         //Content List:
-        locStor = new DbStor(this);
+        list = view.findViewById(R.id.list_view);
+        locStor = new DbStor(this.getContext());
         loadCounterElementList();
         loadListView();
         addClickListener();
@@ -60,6 +66,7 @@ public class ListActivity extends MainActivity {
 
     private void loadCounterElementList(){
         String curUser;
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser()!=null)
             curUser = mAuth.getCurrentUser().getEmail();
         else
@@ -68,9 +75,7 @@ public class ListActivity extends MainActivity {
     }
 
     private void loadListView(){
-        list = (ListView)findViewById(R.id.list_view);
-
-        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this,
+        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this.getContext(),
                 R.layout.list_item,
                 counterElementList) {
             @NonNull
@@ -110,6 +115,6 @@ public class ListActivity extends MainActivity {
     }
 
     private void addCounter(){
-        startActivity(new Intent(getApplicationContext(),CreatorActivity.class));
+        startActivity(new Intent(this.getContext(),CreatorActivity.class));
     }
 }
