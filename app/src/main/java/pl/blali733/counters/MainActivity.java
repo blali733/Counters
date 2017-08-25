@@ -54,13 +54,6 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener{
 
     //DOCME document class fields
-    private boolean listActLoaded = false;
-
-    private ListView list;
-    private List<CounterElement> counterElementList;
-    private DbStor locStor;
-    private AdView mAdView;
-
     private GoogleApiClient mGoogleApiClient;
     private TextView nameText;
     private TextView mailText;
