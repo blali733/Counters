@@ -50,8 +50,7 @@ import java.util.List;
 import pl.blali733.counters.storage.DbStor;
 
 /**
- * Class servicing MainActivity
- *
+ * Class servicing MainActivity.
  * @author blali733
  * @version 0.2
  * @since 0.1
@@ -60,6 +59,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener{
 
+    //DOCME document class fields
     private boolean listActLoaded = false;
 
     private ListView list;
@@ -108,23 +108,23 @@ public class MainActivity extends AppCompatActivity
         //Firebase auth:
         mAuth = FirebaseAuth.getInstance();
 
-        toolbarCtx = (Toolbar) findViewById(R.id.toolbar);
+        toolbarCtx = findViewById(R.id.toolbar);
         setSupportActionBar(toolbarCtx);
 
-        frameLayoutCtx = (FrameLayout) findViewById(R.id.ContentFrame) ;
+        frameLayoutCtx = findViewById(R.id.ContentFrame) ;
 
-        drawerLayoutCtx = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayoutCtx = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayoutCtx, toolbarCtx, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayoutCtx.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationViewCtx = (NavigationView) findViewById(R.id.nav_view);
+        navigationViewCtx = findViewById(R.id.nav_view);
         navigationViewCtx.setNavigationItemSelectedListener(this);
         View headerView = navigationViewCtx.getHeaderView(0);
-        nameText = (TextView)headerView.findViewById(R.id.nameText);
-        mailText = (TextView)headerView.findViewById(R.id.mailText);
-        userImage = (ImageView)headerView.findViewById(R.id.pic);
+        nameText = headerView.findViewById(R.id.nameText);
+        mailText = headerView.findViewById(R.id.mailText);
+        userImage = headerView.findViewById(R.id.pic);
 
         //Db hook:
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Method responsible for triggering view update on each start of activity
-     *
+     * Method responsible for triggering view update on each start of activity.
      * @since 0.1
      */
     @Override
@@ -150,8 +149,7 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Sign in method
-     *
+     * Sign in method.
      * @since 0.1
      */
     private void signIn() {
@@ -160,8 +158,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Sign out method
-     *
+     * Sign out method.
      * @since 0.1
      */
     private void signOut() {
@@ -176,10 +173,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * Method (event) servicing returned values from sub activities.
+     * @param requestCode Request code.
+     * @param resultCode Result code.
+     * @param data Intent with return content.
+     * @since 0.1
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -192,12 +190,41 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method for handling sign-in procedure for obtained user authority.
+     * @param result result of google sign-in procedure.
+     * @since 0.1
+     */
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            firebaseAuthWithGoogle(acct);
+            if(acct != null)
+                Log.d(TAG, "FirebaseAuthWithGoogle:" + acct.getId());
+            else
+                Log.d(TAG, "FirebaseAuthWithGoogle: invalid user id");
+
+            AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithCredential:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                //TODO: Create data migration popup.
+                                updateUI(user);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                Toast.makeText(MainActivity.this, R.string.AuthFail,
+                                        Toast.LENGTH_SHORT).show();
+                                updateUI(null);
+                            }
+                        }
+                    });
         } else {
             // Signed out, show unauthenticated UI.
             Toast.makeText(MainActivity.this,R.string.AuthFail,Toast.LENGTH_SHORT).show();
@@ -205,31 +232,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "FirebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //TODO: Create data migration popup.
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainActivity.this, R.string.AuthFail,
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-    }
-
+    /**
+     * Method responsible for tailoring displayed UI elements basing on current state of authentication.
+     * @param user Firebase User object or null for local client.
+     * @since 0.1
+     */
     private void updateUI(FirebaseUser user) {
         Menu mMenu = navigationViewCtx.getMenu();
         if (user != null) {
@@ -248,6 +255,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method (event) required for servicing critical errors in Google API integration.
+     * @param connectionResult Connection result handle.
+     * @since 0.1
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
@@ -256,6 +268,10 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(MainActivity.this,R.string.GAPIFatal,Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Method (event) responsible for closing expanded drawer by pressing back key.
+     * @since 0.1
+     */
     @Override
     public void onBackPressed() {
         if (drawerLayoutCtx.isDrawerOpen(GravityCompat.START)) {
@@ -265,6 +281,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method (event) servicing menu actions.
+     * @param item Id of item selected by user.
+     * @return Defines if selected item should be highlighted or not.
+     * @since 0.1
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -320,7 +342,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadListView(){
-        list = (ListView)findViewById(R.id.list_view);
+        list = findViewById(R.id.list_view);
 
         ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(this,
                 R.layout.list_item,
@@ -332,10 +354,10 @@ public class MainActivity extends AppCompatActivity
                     convertView = getLayoutInflater().inflate(R.layout.list_item, null);
                 }
 
-                TextView label = (TextView)convertView.findViewById(R.id.item_label);
+                TextView label = convertView.findViewById(R.id.item_label);
                 label.setText(counterElementList.get(position).getLabel());
 
-                TextView value = (TextView)convertView.findViewById(R.id.item_value);
+                TextView value = convertView.findViewById(R.id.item_value);
                 if(counterElementList.get(position).isMixed()){
                     value.setText(counterElementList.get(position).getV1()+" / "+counterElementList.get(position).getV2());
                 }else{
@@ -367,7 +389,7 @@ public class MainActivity extends AppCompatActivity
 
     public void initListAct(){
         listActLoaded = true;
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -376,7 +398,7 @@ public class MainActivity extends AppCompatActivity
         });
         //Firebase auth:
         //ad:
-        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8 Lite
                 .build();
