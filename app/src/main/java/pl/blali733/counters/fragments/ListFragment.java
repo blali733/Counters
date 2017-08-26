@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
-import pl.blali733.counters.dialogs.CreatorActivity;
+import pl.blali733.counters.dialogs.CreatorDialog;
 import pl.blali733.counters.R;
 import pl.blali733.counters.events.AuthFragment;
 import pl.blali733.counters.storage.data.CounterListElement;
@@ -177,6 +177,6 @@ public class ListFragment extends AuthFragment{
      * @since 1.0
      */
     private void addCounter(){
-        startActivity(new Intent(this.getContext(),CreatorActivity.class));
+        startActivity(new Intent(this.getContext(),CreatorDialog.class));
     }
 }

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:theme="@style/AppTheme.NoActionBar">
+    android:background="@drawable/dialog_border">
 
     <TextView
         android:layout_width="match_parent"
@@ -61,6 +61,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:text="@string/createConfirm"
-        android:textColor="@color/text"/>
+        android:textColor="@color/text"
+        android:background="@drawable/button_area"/>
 
 </LinearLayout>

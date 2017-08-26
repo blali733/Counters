@@ -1,12 +1,9 @@
 package pl.blali733.counters.dialogs;
 
-
-import android.app.Dialog;
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+
+import pl.blali733.counters.R;
 
 /**
  * Class responsible for creation and servicing edit window dialog.
@@ -14,20 +11,27 @@ import android.view.LayoutInflater;
  * @version 1.0
  * @since 0.3
  */
-public class EditDialog extends DialogFragment {
+public class EditDialog extends Activity {
     /**
      * Method used to set up dialog window.
      * @param savedInstanceState Application state.
-     * @return Created dialog.
      * @since 1.0
      */
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_update);
+        this.setFinishOnTouchOutside(false);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        return builder.create();
+    }
+
+    /**
+     * Method overriding action of back key into finishing activity.
+     * @since 1.0
+     */
+    @Override
+    public void onBackPressed(){
+        finish();
     }
 }

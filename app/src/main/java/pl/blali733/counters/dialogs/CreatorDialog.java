@@ -1,7 +1,6 @@
 package pl.blali733.counters.dialogs;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -23,7 +21,7 @@ import pl.blali733.counters.storage.data.LocalElement;
  * @version 1.1
  * @since 0.3
  */
-public class CreatorActivity extends Activity {
+public class CreatorDialog extends Activity {
 
     //DOCME fields
     private EditText label;
@@ -39,7 +37,7 @@ public class CreatorActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_creator);
+        setContentView(R.layout.dialog_creator);
         this.setFinishOnTouchOutside(false);
 
         label = findViewById(R.id.ilabel);

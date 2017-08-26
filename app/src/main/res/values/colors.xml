@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="splash">#FFFFFF</color>
     <color name="text">#777b82</color>
+    <color name="stroke">#B1BCBE</color>
+    <color name="button">#B1BCBE</color>
+    <color name="bg_fill">#FFF</color>
 </resources>
