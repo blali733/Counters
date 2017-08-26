@@ -10,16 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create"
-        android:textAlignment="center"
+        android:gravity="center"
         android:textSize="10pt"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold|italic"
+        android:textColor="@color/text"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/label"
-        android:textAlignment="center" />
+        android:gravity="center"
+        android:textColor="@color/text"/>
 
     <EditText
         android:id="@+id/ilabel"
@@ -28,7 +30,8 @@
         android:layout_marginTop="5dp"
         android:hint="@string/labelHint"
         android:inputType="text"
-        android:textAlignment="center" />
+        android:gravity="center"
+        android:textColor="@color/text"/>
 
     <Switch
         android:id="@+id/mVal"
@@ -36,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/multiVal"
-        android:textAlignment="center" />
+        android:gravity="center"
+        android:textColor="@color/text"/>
 
     <FrameLayout
         android:id="@+id/preview"
@@ -56,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:text="@string/createConfirm" />
+        android:text="@string/createConfirm"
+        android:textColor="@color/text"/>
 
 </LinearLayout>

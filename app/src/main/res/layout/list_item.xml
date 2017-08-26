@@ -17,7 +17,8 @@
         android:paddingStart="5dp"
         android:paddingLeft="5dp"
         android:paddingEnd="5dp"
-        android:paddingRight="5dp"/>
+        android:paddingRight="5dp"
+        android:textColor="@color/text"/>
 
     <TextView
         android:id="@+id/item_value"
@@ -29,7 +30,8 @@
         android:text="1234567890 / 1234567890"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textAlignment="center"
-        tools:ignore="HardcodedText" />
+        android:gravity="center"
+        tools:ignore="HardcodedText"
+        android:textColor="@color/text"/>
 
 </RelativeLayout>

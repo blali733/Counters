@@ -78,6 +78,7 @@ public class ListFragment extends AuthFragment{
         AdView mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("3AF148596AC5095AAF4C56253E9DB321")  //My Huawei P8 Lite
+                .addTestDevice("8B0030D18C1EA1DFD60DE9CBA28AAD62")  //My Alcatel 6030X
                 .build();
         mAdView.loadAd(adRequest);
 
