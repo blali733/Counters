@@ -28,5 +28,7 @@
     <string name="multiVal">Use versus counter?</string>
     <string name="create">Create new counter:</string>
     <string name="createConfirm">Create</string>
-    <string name="labelHint">Counter name.</string>
+    <string name="labelHint">Counter name</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

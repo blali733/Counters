@@ -1,4 +1,4 @@
-package pl.blali733.counters;
+package pl.blali733.counters.fragments;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import pl.blali733.counters.dialogs.CreatorActivity;
+import pl.blali733.counters.R;
 import pl.blali733.counters.events.AuthFragment;
 import pl.blali733.counters.storage.data.CounterListElement;
 import pl.blali733.counters.storage.DbStor;
@@ -164,9 +166,7 @@ public class ListFragment extends AuthFragment{
             @Override
             public void onItemClick(AdapterView<?> av, View v, int pos,
                                     long id) {
-//                Intent i = manager.getLaunchIntentForPackage(apps.get(pos).name.toString());
-//                AppsListActivity.this.startActivity(i);
-                //load counter edit layout
+
             }
         });
     }

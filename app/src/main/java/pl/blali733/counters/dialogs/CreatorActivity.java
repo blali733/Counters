@@ -1,5 +1,6 @@
-package pl.blali733.counters;
+package pl.blali733.counters.dialogs;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,16 +13,17 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import pl.blali733.counters.R;
 import pl.blali733.counters.storage.DbStor;
 import pl.blali733.counters.storage.data.LocalElement;
 
 /**
  * Activity responsible for creation of new counter.
  * @author blali733
- * @version 1.0
+ * @version 1.1
  * @since 0.3
  */
-public class CreatorActivity extends AppCompatActivity {
+public class CreatorActivity extends Activity {
 
     //DOCME fields
     private EditText label;
@@ -38,13 +40,13 @@ public class CreatorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator);
-        final View preview = getLayoutInflater().inflate(R.layout.list_item, (FrameLayout)findViewById(R.id.preview));
+        this.setFinishOnTouchOutside(false);
 
         label = findViewById(R.id.ilabel);
         twoVal = findViewById(R.id.mVal);
         Button confirm = findViewById(R.id.createButton);
-        prevLabel = preview.findViewById(R.id.item_label);
-        prevVal = preview.findViewById(R.id.item_value);
+        prevLabel = findViewById(R.id.item_label);
+        prevVal = findViewById(R.id.item_value);
 
         prevLabel.setText(label.getText());
         prevVal.setText("0");

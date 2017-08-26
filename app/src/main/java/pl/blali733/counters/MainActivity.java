@@ -37,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import pl.blali733.counters.events.AuthFragment;
+import pl.blali733.counters.fragments.ListFragment;
 
 /**
  * Class servicing MainActivity.

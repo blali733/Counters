@@ -18,5 +18,7 @@
     <string name="multiVal">Licznik pojedynkowy?</string>
     <string name="create">Stwórz nowy licznik:</string>
     <string name="createConfirm">Utwórz</string>
-    <string name="labelHint">Nazwa licznika.</string>
+    <string name="labelHint">Nazwa licznika</string>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Odrzuć</string>
 </resources>

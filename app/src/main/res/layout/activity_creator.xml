@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create"
-        android:textStyle="bold|italic"
+        android:textAlignment="center"
         android:textSize="10pt"
-        android:textAlignment="center"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:layout_width="match_parent"
@@ -26,29 +26,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:textAlignment="center"
+        android:hint="@string/labelHint"
         android:inputType="text"
-        android:hint="@string/labelHint"/>
+        android:textAlignment="center" />
 
     <Switch
         android:id="@+id/mVal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/multiVal"
         android:layout_marginTop="5dp"
-        android:textAlignment="center"/>
+        android:text="@string/multiVal"
+        android:textAlignment="center" />
 
     <FrameLayout
         android:id="@+id/preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="245dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <include layout="@layout/list_item"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/createButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/createConfirm"
+        android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:layout_gravity="center"/>
+        android:text="@string/createConfirm" />
 
 </LinearLayout>
