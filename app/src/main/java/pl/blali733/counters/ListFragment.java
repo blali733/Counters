@@ -3,7 +3,6 @@ package pl.blali733.counters;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,24 +20,47 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.List;
 
 import pl.blali733.counters.events.AuthFragment;
-import pl.blali733.counters.events.interfaces.AuthorityChange;
-import pl.blali733.counters.storage.data.CounterElement;
+import pl.blali733.counters.storage.data.CounterListElement;
 import pl.blali733.counters.storage.DbStor;
 
+/**
+ * Class
+ * @author blali733
+ * @version 1.0
+ * @since 0.2
+ */
 public class ListFragment extends AuthFragment{
 
+    //DOCME fields
     private ListView list;
-    private List<CounterElement> counterElementList;
+    private List<CounterListElement> counterElementList;
     private DbStor locStor;
 
+    /**
+     * Logging tag.
+     */
     private static final String TAG = "ListView";
 
+    /**
+     * Method responsible for inflation of fragment view.
+     * @param inflater Layout inflater instance.
+     * @param container View container which would be inflated.
+     * @param savedInstanceState State of application.
+     * @return Inflated view.
+     * @since 1.0
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
+    /**
+     * Method executed after creation of view, responsible for setting up fragment content.
+     * @param view Root view of fragment.
+     * @param savedInstanceState State of application.
+     * @since 1.0
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         Log.i(TAG,"content drawn");
@@ -65,12 +87,21 @@ public class ListFragment extends AuthFragment{
         addClickListener();
     }
 
+    /**
+     * Method responsible for reaction to authority change event.
+     * @see pl.blali733.counters.events.AuthFragment#onAuthChange()
+     * @since 1.0
+     */
     @Override
     public void onAuthChange() {
         loadCounterElementList();
         loadListView();
     }
 
+    /**
+     * Method responsible for reloading list on resume to activity.
+     * @since 1.0
+     */
     @Override
     public void onResume(){
         super.onResume();
@@ -78,6 +109,10 @@ public class ListFragment extends AuthFragment{
         loadListView();
     }
 
+    /**
+     * Method responsible for getting list of elements from database.
+     * @since 1.0
+     */
     private void loadCounterElementList(){
         String curUser;
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -88,8 +123,12 @@ public class ListFragment extends AuthFragment{
         counterElementList = locStor.displayList(curUser);
     }
 
+    /**
+     * Method responsible for population of ListView with content of obtained list.
+     * @since 1.0
+     */
     private void loadListView(){
-        ArrayAdapter<CounterElement> adapter = new ArrayAdapter<CounterElement>(getActivity(),
+        ArrayAdapter<CounterListElement> adapter = new ArrayAdapter<CounterListElement>(getActivity(),
                 R.layout.list_item,
                 counterElementList) {
             @NonNull
@@ -116,6 +155,10 @@ public class ListFragment extends AuthFragment{
         list.setAdapter(adapter);
     }
 
+    /**
+     * Method adding ClickListener to items displayed on list.
+     * @since 1.0
+     */
     private void addClickListener(){
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,6 +171,10 @@ public class ListFragment extends AuthFragment{
         });
     }
 
+    /**
+     * Method forwarding execution to counter creator activity.
+     * @since 1.0
+     */
     private void addCounter(){
         startActivity(new Intent(this.getContext(),CreatorActivity.class));
     }

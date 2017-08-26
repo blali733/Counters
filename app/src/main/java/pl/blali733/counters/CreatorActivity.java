@@ -15,13 +15,25 @@ import android.widget.TextView;
 import pl.blali733.counters.storage.DbStor;
 import pl.blali733.counters.storage.data.LocalElement;
 
+/**
+ * Activity responsible for creation of new counter.
+ * @author blali733
+ * @version 1.0
+ * @since 0.3
+ */
 public class CreatorActivity extends AppCompatActivity {
 
+    //DOCME fields
     private EditText label;
     private Switch twoVal;
     private TextView prevLabel;
     private TextView prevVal;
 
+    /**
+     * Method populating counter creation screen.
+     * @param savedInstanceState State of application.
+     * @since 1.0
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +80,10 @@ public class CreatorActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Method responsible for persisting created counter in database(s).
+     * @since 1.0
+     */
     void saveValues(){
         DbStor db = new DbStor(getApplicationContext());
         LocalElement elem = new LocalElement(label.getText().toString(),0,0,twoVal.isChecked()?"true":"false");
@@ -75,6 +91,10 @@ public class CreatorActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Method overriding action of back key into finishing activity.
+     * @since 1.0
+     */
     @Override
     public void onBackPressed(){
         finish();
