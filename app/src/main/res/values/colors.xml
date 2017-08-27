@@ -8,5 +8,6 @@
     <color name="stroke">#B1BCBE</color>
     <color name="button">#B1BCBE</color>
     <color name="bg_fill">#FFF</color>
-    <!--<color name=""-->
+    <color name="np_main">#f8f8f8</color>
+    <color name="np_accent">#707070</color>
 </resources>

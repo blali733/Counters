@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import pl.blali733.counters.exceptions.TransactionException;
 import pl.blali733.counters.storage.data.CounterListElement;
 import pl.blali733.counters.storage.data.LocalElement;
 
@@ -24,9 +24,10 @@ import pl.blali733.counters.storage.data.LocalElement;
  */
 public class DbStor extends SQLiteOpenHelper {
     //DOCME fields
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
     private static final String DB_NAME = "Counters";
-    static final String TABLE = "counters";
+    static final String TABLE_MAIN = "counters";
+    static final String TABLE_HISTORY = "history";
 
     // Contacts Table Columns names
     static final String KEY_ID = "id";
@@ -38,6 +39,9 @@ public class DbStor extends SQLiteOpenHelper {
     static final String KEY_DIRTY = "dirty";
     static final String KEY_UUID = "uuid";
     static final String KEY_DELETED = "del";
+    static final String KEY_OPERATION1 = "operation1";
+    static final String KEY_OPERATION2 = "operation2";
+    static final String KEY_TIME = "timestamp";
 
     private static final String TAG = "Local DB handler";
 
@@ -57,7 +61,7 @@ public class DbStor extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_MAIN + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_AUTH + " TEXT,"
                 + KEY_LABEL + " TEXT,"
@@ -67,6 +71,14 @@ public class DbStor extends SQLiteOpenHelper {
                 + KEY_DIRTY + " TEXT,"
                 + KEY_UUID + " TEXT,"
                 + KEY_DELETED + " TEXT );";
+        db.execSQL(CREATE_TABLE);
+        CREATE_TABLE = "CREATE TABLE " + TABLE_HISTORY + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_AUTH + " TEXT,"
+                + KEY_UUID + " TEXT,"
+                + KEY_OPERATION1 + " TEXT,"
+                + KEY_OPERATION2 + " TEXT,"
+                + KEY_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP );";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -81,7 +93,7 @@ public class DbStor extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch(oldVersion) {
             case 1: {
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAIN);
                 onCreate(db);
             }break;
             case 2: {
@@ -90,6 +102,10 @@ public class DbStor extends SQLiteOpenHelper {
             case 3:{
                 DbUpdater.UpdateV3(db);
             }//Lack of break is intentional.
+            case 4:{
+                DbUpdater.UpdateV4(db);
+            }//Lack of break is intentional.
+
         }
     }
 
@@ -116,7 +132,7 @@ public class DbStor extends SQLiteOpenHelper {
         values.put(KEY_UUID, localElement.getUuid().toString());
         values.put(KEY_DELETED, "false");
 
-        db.insert(TABLE,null,values);
+        db.insert(TABLE_MAIN,null,values);
         db.close();
     }
 
@@ -134,7 +150,7 @@ public class DbStor extends SQLiteOpenHelper {
         LocalElement cElem = null;
         Cursor cursor;
         try {
-            cursor = db.query(TABLE, new String[]{
+            cursor = db.query(TABLE_MAIN, new String[]{
                             KEY_ID, KEY_AUTH, KEY_LABEL, KEY_V1, KEY_V2, KEY_MIXED, KEY_DIRTY, KEY_UUID, KEY_DELETED
                     }, KEY_ID + "=?",
                     new String[]{String.valueOf(id)}, null, null, null, null);
@@ -172,7 +188,7 @@ public class DbStor extends SQLiteOpenHelper {
         LocalElement cElem = null;
         Cursor cursor;
         try {
-            cursor = db.query(TABLE, new String[]{
+            cursor = db.query(TABLE_MAIN, new String[]{
                             KEY_ID, KEY_AUTH, KEY_LABEL, KEY_V1, KEY_V2, KEY_MIXED, KEY_DIRTY, KEY_UUID, KEY_DELETED
                     }, KEY_UUID + "=?",
                     new String[]{uuid.toString()}, null, null, null, null);
@@ -205,7 +221,7 @@ public class DbStor extends SQLiteOpenHelper {
      */
     //TESTME
     public int getLocalElementCount() {
-        String countQuery = "SELECT  * FROM " + TABLE;
+        String countQuery = "SELECT  * FROM " + TABLE_MAIN;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count;
@@ -220,20 +236,38 @@ public class DbStor extends SQLiteOpenHelper {
      * Method responsible for updating element of database.
      * @param localElement Element with updated values.
      * @return Result of update procedure.
+     * @throws TransactionException Exception when transaction failed and data cannot be persisted.
      * @since 1.0
      */
     //TESTME check if update is properly performed
-    public int updateLocalElement(LocalElement localElement) {
+    public int updateLocalElement(LocalElement localElement, int dv1, int dv2) throws TransactionException {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LABEL, localElement.getLabel());
         values.put(KEY_V1, localElement.getV1());
         values.put(KEY_V2, localElement.getV2());
-        values.put(KEY_MIXED, localElement.getMixed());
-        values.put(KEY_DIRTY, localElement.getDirty());
+        values.put(KEY_DIRTY, "true");
 
-        int result = db.update(TABLE,values,KEY_UUID+" = ?",new String[]{localElement.getUuid().toString()});
+        ContentValues mvalues = new ContentValues();
+        mvalues.put(KEY_AUTH, localElement.getAuth());
+        mvalues.put(KEY_UUID, localElement.getUuid().toString());
+        mvalues.put(KEY_OPERATION1, Integer.toString(dv1));
+        mvalues.put(KEY_OPERATION2, Integer.toString(dv2));
+
+        int result;
+        db.beginTransaction();
+        {
+            long res = db.insert(TABLE_HISTORY,null,mvalues);
+            result = db.update(TABLE_MAIN, values, KEY_UUID + " = ?", new String[]{localElement.getUuid().toString()});
+            if(res != -1 && result > 0){
+                db.setTransactionSuccessful();
+            }else{
+                db.endTransaction();
+                db.close();
+                throw new TransactionException();
+            }
+        }
+        db.endTransaction();
         db.close();
         return result;
     }
@@ -255,7 +289,7 @@ public class DbStor extends SQLiteOpenHelper {
         }else{
             values.put(KEY_AUTH, "localhost");
         }
-        int result = db.update(TABLE,values,KEY_UUID+" = ?",new String[]{localElement.getUuid().toString()});
+        int result = db.update(TABLE_MAIN,values,KEY_UUID+" = ?",new String[]{localElement.getUuid().toString()});
         db.close();
         return result;
     }
@@ -270,7 +304,7 @@ public class DbStor extends SQLiteOpenHelper {
     @Deprecated
     public void deleteLocalElement(LocalElement localElement) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE, KEY_ID + " = ?",
+        db.delete(TABLE_MAIN, KEY_ID + " = ?",
                 new String[] { String.valueOf(localElement.getId()) });
         db.close();
     }
@@ -285,7 +319,7 @@ public class DbStor extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_DELETED,"true");
-        db.update(TABLE,values,KEY_UUID+" = ?",new String[]{localElement.getUuid().toString()});
+        db.update(TABLE_MAIN,values,KEY_UUID+" = ?",new String[]{localElement.getUuid().toString()});
         db.close();
     }
 
@@ -296,7 +330,7 @@ public class DbStor extends SQLiteOpenHelper {
      * @since 1.0
      */
     public List<CounterListElement> displayList(String auth){
-        String countQuery = "SELECT  * FROM " + TABLE+" WHERE "+KEY_AUTH+" LIKE '"+auth+"' AND " + KEY_DELETED + "LIKE 'false'";
+        String countQuery = "SELECT  * FROM " + TABLE_MAIN +" WHERE "+KEY_AUTH+" LIKE '"+auth+"' AND " + KEY_DELETED + "LIKE 'false'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         List<CounterListElement> list = new ArrayList<>();
