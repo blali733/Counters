@@ -42,7 +42,7 @@ import pl.blali733.counters.fragments.ListFragment;
 /**
  * Class servicing MainActivity.
  * @author blali733
- * @version 0.3
+ * @version 0.4
  * @since 0.1
  */
 public class MainActivity extends AppCompatActivity
@@ -312,8 +312,8 @@ public class MainActivity extends AppCompatActivity
                 signOut();
             }break;
             case R.id.nav_own:{
-                //TODO Kinda hackish but it works - for now
-//
+                //TODO reimplement
+
             }break;
             case R.id.nav_shared:{
                 //TODO: Implement shared counters list.

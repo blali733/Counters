@@ -11,6 +11,7 @@ public class CounterListElement {
     private String label;
     private int v1,v2;
     private boolean mixed;
+    private String uuid;
 
     /**
      * Getter.
@@ -85,6 +86,24 @@ public class CounterListElement {
     }
 
     /**
+     * Getter.
+     * @return Current value.
+     * @since 1.0
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Setter.
+     * @param uuid New value.
+     * @since 1.0
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
      * Default empty constructor.
      * @since 1.0
      */
@@ -98,10 +117,11 @@ public class CounterListElement {
      * @param mixed Item mixed flag.
      * @since 1.0
      */
-    public CounterListElement(String label, int v1, int v2, boolean mixed) {
+    public CounterListElement(String label, int v1, int v2, boolean mixed, String uuid) {
         this.label = label;
         this.v1 = v1;
         this.v2 = v2;
         this.mixed = mixed;
+        this.uuid = uuid;
     }
 }

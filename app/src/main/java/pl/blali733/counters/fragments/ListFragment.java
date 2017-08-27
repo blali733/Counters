@@ -21,6 +21,7 @@ import java.util.List;
 
 import pl.blali733.counters.dialogs.CreatorDialog;
 import pl.blali733.counters.R;
+import pl.blali733.counters.dialogs.EditDialog;
 import pl.blali733.counters.events.AuthFragment;
 import pl.blali733.counters.storage.data.CounterListElement;
 import pl.blali733.counters.storage.DbStor;
@@ -167,7 +168,12 @@ public class ListFragment extends AuthFragment{
             @Override
             public void onItemClick(AdapterView<?> av, View v, int pos,
                                     long id) {
-
+                Intent intent = new Intent(getContext(), EditDialog.class);
+                intent.putExtra("uuid", counterElementList.get(pos).getUuid());
+                intent.putExtra("v1", counterElementList.get(pos).getV1());
+                intent.putExtra("v2", counterElementList.get(pos).getV2());
+                intent.putExtra("mixed", String.valueOf(counterElementList.get(pos).isMixed()));
+                startActivity(intent);
             }
         });
     }

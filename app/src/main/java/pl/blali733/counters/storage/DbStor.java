@@ -262,6 +262,7 @@ public class DbStor extends SQLiteOpenHelper {
             elem.setV1(Integer.parseInt(cursor.getString(3)));
             elem.setV2(Integer.parseInt(cursor.getString(4)));
             elem.setMixed(Boolean.parseBoolean(cursor.getString(5)));
+            elem.setUuid(cursor.getString(7));
             list.add(elem);
         }
         cursor.close();
