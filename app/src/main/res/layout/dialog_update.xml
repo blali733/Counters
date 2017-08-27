@@ -7,6 +7,7 @@
     android:background="@drawable/dialog_border">
 
     <TextView
+        android:id="@+id/edit_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -17,18 +18,36 @@
 
     <FrameLayout
         android:id="@+id/mod_frame"
-        android:padding="3dp"
-        android:layout_width="match_parent"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:background="@drawable/layout_border"/>
 
-    <Button
-        android:id="@+id/updateButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:text="@string/createConfirm"
-        android:textColor="@color/text"
-        android:background="@drawable/button_area"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/updateConfirm"
+            android:textColor="@color/text"
+            android:background="@drawable/button_area"/>
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deleteConfirm"
+            android:textColor="@color/text"
+            android:background="@drawable/button_area"/>
+    </LinearLayout>
 </LinearLayout>

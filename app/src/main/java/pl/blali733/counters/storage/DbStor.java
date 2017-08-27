@@ -105,7 +105,6 @@ public class DbStor extends SQLiteOpenHelper {
             case 4:{
                 DbUpdater.UpdateV4(db);
             }//Lack of break is intentional.
-
         }
     }
 
@@ -330,7 +329,7 @@ public class DbStor extends SQLiteOpenHelper {
      * @since 1.0
      */
     public List<CounterListElement> displayList(String auth){
-        String countQuery = "SELECT  * FROM " + TABLE_MAIN +" WHERE "+KEY_AUTH+" LIKE '"+auth+"' AND " + KEY_DELETED + "LIKE 'false'";
+        String countQuery = "SELECT  * FROM " + TABLE_MAIN +" WHERE "+KEY_AUTH+" LIKE '"+auth+"' AND " + KEY_DELETED + " LIKE 'false'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         List<CounterListElement> list = new ArrayList<>();

@@ -10,13 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 import pl.blali733.counters.R;
+import pl.blali733.counters.exceptions.TransactionException;
+import pl.blali733.counters.storage.DbStor;
+import pl.blali733.counters.storage.data.LocalElement;
 
 /**
  * Class responsible for creation and servicing edit window dialog.
@@ -30,6 +37,7 @@ public class EditDialog extends Activity {
     private int v1;
     private int v2;
     private String mixed;
+    private String label;
     private NumberPicker v1p;
     private NumberPicker v2p;
 
@@ -54,10 +62,14 @@ public class EditDialog extends Activity {
             v1 = extras.getInt("v1");
             v2 = extras.getInt("v2");
             mixed = extras.getString("mixed");
+            label = extras.getString("label");
         }else{
             Log.e(TAG,"No data passed to activity");
             finish();
         }
+
+        TextView textView = findViewById(R.id.edit_label);
+        textView.setText(label);
 
         View handle;
         if("true".equals(mixed)){
@@ -127,6 +139,18 @@ public class EditDialog extends Activity {
                 persist();
             }
         });
+
+        Button buttonDel = findViewById(R.id.deleteButton);
+        buttonDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DbStor db = new DbStor(getApplicationContext());
+                LocalElement elem = db.getLocalElement(UUID.fromString(uuid));
+                db.tagDeletedLocalElement(elem);
+                db.close();
+                finish();
+            }
+        });
     }
 
     /**
@@ -134,7 +158,31 @@ public class EditDialog extends Activity {
      * @since 1.0
      */
     private void persist(){
-        Toast.makeText(this,"Persisting changes (not really)!"+(v1p.getValue()+minVal),Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"Persisting changes (not really)!"+(v1p.getValue()+minVal),Toast.LENGTH_LONG).show();
+        try {
+            DbStor db = new DbStor(getApplicationContext());
+            LocalElement elem = db.getLocalElement(UUID.fromString(uuid));
+            int dv1, dv2;
+            if ("true".equals(mixed)) {
+                dv1 = v1p.getValue() + minVal - elem.getV1();
+                dv2 = v2p.getValue() + minVal - elem.getV2();
+                elem.setV1(v1p.getValue()+minVal);
+                elem.setV2(v2p.getValue()+minVal);
+            }else{
+                dv1 = v1p.getValue() + minVal - elem.getV1();
+                dv2 = 0;
+                elem.setV1(v1p.getValue()+minVal);
+                elem.setV2(0);
+            }
+            elem.setV1(v1p.getValue()+minVal);
+            elem.setV2(0);
+            db.updateLocalElement(elem,dv1,dv2);
+            db.close();
+            finish();
+        }catch(TransactionException ex){
+            Crashlytics.logException(ex);
+            Toast.makeText(this,"Error while saving data! Please retry."+(v1p.getValue()+minVal),Toast.LENGTH_LONG).show();
+        }
     }
 
     /**

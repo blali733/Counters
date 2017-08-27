@@ -172,6 +172,7 @@ public class ListFragment extends AuthFragment{
                 intent.putExtra("uuid", counterElementList.get(pos).getUuid());
                 intent.putExtra("v1", counterElementList.get(pos).getV1());
                 intent.putExtra("v2", counterElementList.get(pos).getV2());
+                intent.putExtra("label", counterElementList.get(pos).getLabel());
                 intent.putExtra("mixed", String.valueOf(counterElementList.get(pos).isMixed()));
                 startActivity(intent);
             }

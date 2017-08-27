@@ -21,4 +21,6 @@
     <string name="labelHint">Nazwa licznika</string>
     <string name="save">Zapisz</string>
     <string name="cancel">Odrzuć</string>
+    <string name="updateConfirm">Zapisz</string>
+    <string name="deleteConfirm">Usuń</string>
 </resources>

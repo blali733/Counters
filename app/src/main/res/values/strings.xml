@@ -31,4 +31,6 @@
     <string name="labelHint">Counter name</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="updateConfirm">Save</string>
+    <string name="deleteConfirm">Delete</string>
 </resources>

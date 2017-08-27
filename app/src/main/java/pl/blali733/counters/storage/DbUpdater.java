@@ -12,7 +12,7 @@ import static pl.blali733.counters.storage.DbStor.*;
 /**
  * Scripts updating local database.
  * @author blali733
- * @version 1.2
+ * @version 1.3
  * @since 0.4 app / 1.1 pkg
  */
 class DbUpdater {

@@ -317,13 +317,19 @@ public class MainActivity extends AppCompatActivity
             }break;
             case R.id.nav_shared:{
                 //TODO: Implement shared counters list.
-            }break;
+                Toast.makeText(this,"Not implemented yet.",Toast.LENGTH_SHORT).show();
+                return false;
+            }//break;
             case R.id.nav_share:{
                 //TODO: Implement counter sharing.
-            }break;
+                Toast.makeText(this,"Not implemented yet.",Toast.LENGTH_SHORT).show();
+                return false;
+            }//break;
             case R.id.nav_send:{
                 //TODO: Implement sending counter results.
-            }break;
+                Toast.makeText(this,"Not implemented yet.",Toast.LENGTH_SHORT).show();
+                return false;
+            }//break;
         }
 
         drawerLayoutCtx.closeDrawer(GravityCompat.START);
