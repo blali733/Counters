@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  *
  * @author blali733
- * @version 1.0
+ * @version 1.2
  * @since 0.2
  */
 public class LocalElement {
@@ -18,6 +18,7 @@ public class LocalElement {
     private String mixed;
     private String dirty;
     private UUID uuid;
+    private String deleted;
 
     /**
      * Getter.
@@ -144,10 +145,37 @@ public class LocalElement {
     /**
      * Getter.
      * @return Current value.
-     * @since 1.0
+     * @since 1.1
      */
     public UUID getUuid() {
         return uuid;
+    }
+
+    /**
+     * Setter.
+     * @param uuid New value.
+     * @since 1.1
+     */
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
+     * Getter.
+     * @return Current value.
+     * @since 1.2
+     */
+    public String getDeleted() {
+        return deleted;
+    }
+
+    /**
+     * Setter.
+     * @param deleted New value.
+     * @since 1.2
+     */
+    public void setDeleted(String deleted) {
+        this.deleted = deleted;
     }
 
     /**
@@ -157,6 +185,7 @@ public class LocalElement {
     public LocalElement(){
         dirty = "true";
         uuid = UUID.randomUUID();
+        deleted = "false";
     }
 
     /**
@@ -170,7 +199,7 @@ public class LocalElement {
      * @param dirty Item dirty flag - converted to String.
      * @since 1.0
      */
-    public LocalElement(int id, String auth, String label, int v1, int v2, String mixed, String dirty, UUID uuid) {
+    public LocalElement(int id, String auth, String label, int v1, int v2, String mixed, String dirty, UUID uuid, String deleted) {
         this.id = id;
         this.auth = auth;
         this.label = label;
@@ -179,6 +208,7 @@ public class LocalElement {
         this.mixed = mixed;
         this.dirty = dirty;
         this.uuid = uuid;
+        this.deleted = deleted;
     }
 
     /**
@@ -196,5 +226,6 @@ public class LocalElement {
         this.mixed = mixed;
         this.dirty = "true";
         this.uuid = UUID.randomUUID();
+        this.deleted = "false";
     }
 }
