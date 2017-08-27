@@ -1,5 +1,7 @@
 package pl.blali733.counters.storage.data;
 
+import java.util.UUID;
+
 /**
  *
  * @author blali733
@@ -15,6 +17,7 @@ public class LocalElement {
     private int v1,v2;
     private String mixed;
     private String dirty;
+    private UUID uuid;
 
     /**
      * Getter.
@@ -139,11 +142,21 @@ public class LocalElement {
     public void setDirty(String dirty){this.dirty = dirty;}
 
     /**
+     * Getter.
+     * @return Current value.
+     * @since 1.0
+     */
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    /**
      * Default constructor, creates empty object with set dirty flag (String representation).
      * @since 1.0
      */
     public LocalElement(){
         dirty = "true";
+        uuid = UUID.randomUUID();
     }
 
     /**
@@ -157,7 +170,7 @@ public class LocalElement {
      * @param dirty Item dirty flag - converted to String.
      * @since 1.0
      */
-    public LocalElement(int id, String auth, String label, int v1, int v2, String mixed, String dirty) {
+    public LocalElement(int id, String auth, String label, int v1, int v2, String mixed, String dirty, UUID uuid) {
         this.id = id;
         this.auth = auth;
         this.label = label;
@@ -165,6 +178,7 @@ public class LocalElement {
         this.v2 = v2;
         this.mixed = mixed;
         this.dirty = dirty;
+        this.uuid = uuid;
     }
 
     /**
@@ -181,5 +195,6 @@ public class LocalElement {
         this.v2 = v2;
         this.mixed = mixed;
         this.dirty = "true";
+        this.uuid = UUID.randomUUID();
     }
 }
