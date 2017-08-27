@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                Toast.makeText(MainActivity.this, R.string.AuthFail,
+                                Toast.makeText(MainActivity.this, R.string.FirebaseAuthFail,
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
                             }

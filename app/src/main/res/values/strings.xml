@@ -19,13 +19,14 @@
     <string name="placeholderMail" translatable="false">localhost</string>
 
     <string name="AuthFail">Authentication failed!</string>
+    <string name="FirebaseAuthFail">Firebase authentication failed!</string>
     <string name="GAPIFatal">Fatal error in Google APIs</string>
 
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-4482071916806834/4264961880</string>
     <string name="cown">My own</string>
     <string name="cshared">Shared with me</string>
     <string name="account">Account</string>
-    <string name="multiVal">Use versus counter?</string>
+    <string name="multiVal">Use dual counter?</string>
     <string name="create">Create new counter:</string>
     <string name="createConfirm">Create</string>
     <string name="labelHint">Counter name</string>
