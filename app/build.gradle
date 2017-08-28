@@ -43,7 +43,7 @@ android {
                 variant.outputs.each { output ->
                     def name = 'counters-signed-'
                     def ver = variant.versionName
-                    def outputDir = "./docs"
+                    def outputDir = "./signed"
 
                     def outName = name+ver+'.apk'
 
