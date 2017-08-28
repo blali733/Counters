@@ -10,21 +10,49 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+
+def keystorePropertiesFile = rootProject.file("../_keystore/counters_keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "pl.blali733.counters"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 5
-        versionName "0.5"
+        versionCode 6
+        versionName "0.5.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def name = 'counters-signed-'
+                    def ver = variant.versionName
+                    def outputDir = "./docs"
+
+                    def outName = name+ver+'.apk'
+
+                    output.outputFile = new File(outputDir, outName)
+                }
+            }
+        }
+        debug {
+            applicationIdSuffix ".debug"
         }
     }
 }

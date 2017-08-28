@@ -168,14 +168,16 @@ public class EditDialog extends Activity {
                 dv2 = v2p.getValue() + minVal - elem.getV2();
                 elem.setV1(v1p.getValue()+minVal);
                 elem.setV2(v2p.getValue()+minVal);
+                elem.setV1(v1p.getValue()+minVal);
+                elem.setV2(v2p.getValue()+minVal);
             }else{
                 dv1 = v1p.getValue() + minVal - elem.getV1();
                 dv2 = 0;
                 elem.setV1(v1p.getValue()+minVal);
                 elem.setV2(0);
+                elem.setV1(v1p.getValue()+minVal);
+                elem.setV2(0);
             }
-            elem.setV1(v1p.getValue()+minVal);
-            elem.setV2(0);
             db.updateLocalElement(elem,dv1,dv2);
             db.close();
             finish();
