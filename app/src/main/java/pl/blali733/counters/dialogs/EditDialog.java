@@ -33,6 +33,7 @@ import pl.blali733.counters.storage.data.LocalElement;
  */
 public class EditDialog extends Activity {
 
+    //DOCME
     private String uuid;
     private int v1;
     private int v2;
@@ -75,16 +76,16 @@ public class EditDialog extends Activity {
         if("true".equals(mixed)){
             handle = getLayoutInflater().inflate(R.layout.dual_mod,(ViewGroup)findViewById(R.id.mod_frame),true);
             v1p = handle.findViewById(R.id.v1Picker);
-            v1p.setMinValue(0);
-            v1p.setMaxValue(maxVal-minVal);
-            v1p.setValue(v1-minVal);
-            v1p.setWrapSelectorWheel(false);
             v1p.setFormatter(new NumberPicker.Formatter() {
                 @Override
                 public String format(int i) {
-                    return Integer.toString(i+minVal);
+                    return Integer.toString(-i+maxVal);
                 }
             });
+            v1p.setMinValue(0);
+            v1p.setMaxValue(maxVal-minVal);
+            v1p.setValue(-v1+maxVal);
+            v1p.setWrapSelectorWheel(false);
             try {
                 Method method = v1p.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
                 method.setAccessible(true);
@@ -93,16 +94,16 @@ public class EditDialog extends Activity {
                 e.printStackTrace();
             }
             v2p = handle.findViewById(R.id.v2Picker);
-            v2p.setMinValue(0);
-            v2p.setMaxValue(maxVal-minVal);
-            v2p.setValue(v2-minVal);
-            v2p.setWrapSelectorWheel(false);
             v2p.setFormatter(new NumberPicker.Formatter() {
                 @Override
                 public String format(int i) {
-                    return Integer.toString(i+minVal);
+                    return Integer.toString(-i+maxVal);
                 }
             });
+            v2p.setMinValue(0);
+            v2p.setMaxValue(maxVal-minVal);
+            v2p.setValue(-v2+maxVal);
+            v2p.setWrapSelectorWheel(false);
             try {
                 Method method = v2p.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
                 method.setAccessible(true);
@@ -116,12 +117,12 @@ public class EditDialog extends Activity {
             v1p.setFormatter(new NumberPicker.Formatter() {
                 @Override
                 public String format(int i) {
-                    return Integer.toString(i+minVal);
+                    return Integer.toString(-i+maxVal);
                 }
             });
             v1p.setMinValue(0);
             v1p.setMaxValue(maxVal-minVal);
-            v1p.setValue(v1-minVal);
+            v1p.setValue(-v1+maxVal);
             try {
                 Method method = v1p.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
                 method.setAccessible(true);
@@ -164,18 +165,14 @@ public class EditDialog extends Activity {
             LocalElement elem = db.getLocalElement(UUID.fromString(uuid));
             int dv1, dv2;
             if ("true".equals(mixed)) {
-                dv1 = v1p.getValue() + minVal - elem.getV1();
-                dv2 = v2p.getValue() + minVal - elem.getV2();
-                elem.setV1(v1p.getValue()+minVal);
-                elem.setV2(v2p.getValue()+minVal);
-                elem.setV1(v1p.getValue()+minVal);
-                elem.setV2(v2p.getValue()+minVal);
+                dv1 = maxVal - v1p.getValue() - elem.getV1();
+                dv2 = maxVal - v2p.getValue() - elem.getV2();
+                elem.setV1(maxVal - v1p.getValue());
+                elem.setV2(maxVal - v2p.getValue());
             }else{
-                dv1 = v1p.getValue() + minVal - elem.getV1();
+                dv1 = maxVal - v1p.getValue() - elem.getV1();
                 dv2 = 0;
-                elem.setV1(v1p.getValue()+minVal);
-                elem.setV2(0);
-                elem.setV1(v1p.getValue()+minVal);
+                elem.setV1(maxVal - v1p.getValue());
                 elem.setV2(0);
             }
             db.updateLocalElement(elem,dv1,dv2);
