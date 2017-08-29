@@ -4,13 +4,33 @@ package pl.blali733.counters.storage.data;
  * Class defining parameters of displayed counter element.
  * @author blali733
  * @version 1.0
- * @since 0.2
+ * @since 0.2 app / 1.0 package
  */
 public class CounterListElement {
-    //DOCME fields
+
+    /**
+     * Description of counter.
+     */
     private String label;
-    private int v1,v2;
+
+    /**
+     * Primary value.
+     */
+    private int v1;
+
+    /**
+     * Secondary value, equal to 0 for single counters.
+     */
+    private int v2;
+
+    /**
+     * Defines if counter is double or single.
+     */
     private boolean mixed;
+
+    /**
+     * UUID of reference in database.
+     */
     private String uuid;
 
     /**
