@@ -1,5 +1,6 @@
 package pl.blali733.counters.storage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -20,13 +21,25 @@ public class SettingsStorage implements AuthorityChange {
      */
     private Context ctx = null;
 
+    /**
+     * Handle to shared preferences object.
+     */
     private SharedPreferences pref;
+
+    /**
+     * Handle to editable version of shared preferences object.
+     */
     private SharedPreferences.Editor editor;
+
+    /**
+     * Private mode toggle?
+     */
     private int PRIVATE_MODE = 0;
 
     /**
      * {@inheritDoc}
      */
+    @SuppressLint("CommitPrefEdits")
     @Override
     public void onAuthChange() {
         if(ctx!=null){

@@ -59,6 +59,8 @@ public class Settings implements AuthorityChange {
      */
     public void initializeSettings(Context ctx){
         mSettingsStorage = new SettingsStorage(ctx);
+        if(mSettingsStorage.getStringValue("direction")==null)
+            mSettingsStorage.storeValue("direction","false");
         directionUp = Boolean.parseBoolean(mSettingsStorage.getStringValue("direction"));
     }
 
@@ -75,6 +77,7 @@ public class Settings implements AuthorityChange {
     public void onAuthChange() {
         if(mSettingsStorage != null){
             mSettingsStorage.onAuthChange();
+            directionUp = Boolean.parseBoolean(mSettingsStorage.getStringValue("direction"));
         }
     }
 }

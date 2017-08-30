@@ -260,8 +260,10 @@ public class MainActivity extends AppCompatActivity
             mMenu.findItem(R.id.log_out).setVisible(false);
         }
         AuthFragment frag = (AuthFragment) getSupportFragmentManager().findFragmentById(R.id.ContentFrame);
-        if(frag != null)
+        if(frag != null) {
             frag.onAuthChange();
+            Settings.getInstance().onAuthChange();
+        }
     }
 
     /**
