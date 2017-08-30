@@ -39,8 +39,8 @@ public class EditDialog extends Activity {
     private NumberPicker v1p;
     private NumberPicker v2p;
 
-    //private final int maxVal = 99999;
-    private final int maxVal = 5;
+    private final int maxVal = 99999;
+    //private final int maxVal = 5;
 
     private static final String TAG = "EditDialog";
 
