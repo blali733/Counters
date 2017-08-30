@@ -24,4 +24,7 @@
     <string name="updateConfirm">Zapisz</string>
     <string name="deleteConfirm">Usuń</string>
     <string name="FirebaseAuthFail">Autoryzacja Firebase nieudana!</string>
+    <string name="direction_down">w dół</string>
+    <string name="direction_label">Kierunek przewijania:</string>
+    <string name="direction_up">w górę</string>
 </resources>
