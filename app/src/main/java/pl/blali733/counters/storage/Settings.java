@@ -15,7 +15,7 @@ public class Settings {
     /**
      * Direction of spinners.
      */
-    private boolean direction = false;
+    private boolean directionUp = false;
 
     /**
      * Instance getter.
@@ -27,21 +27,21 @@ public class Settings {
     }
 
     /**
-     * Switcher of direction value.
+     * Switcher of directionUp value.
      * @since 1.0
      */
-    public void setDirection(boolean direction){
-        this.direction = direction;
+    public void setDirectionUp(boolean directionUp){
+        this.directionUp = directionUp;
         persist();
     }
 
     /**
-     * Getter of direction.
-     * @return direction value.
+     * Getter of directionUp.
+     * @return directionUp value.
      * @since 1.0
      */
-    public boolean isDirection() {
-        return direction;
+    public boolean isDirectionUp() {
+        return directionUp;
     }
 
     /**

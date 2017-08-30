@@ -27,10 +27,10 @@ public class SettingsDialog extends Activity {
         setContentView(R.layout.dialog_settings);
 
         Switch swDirection = findViewById(R.id.settings_scrolling_direction);
-        swDirection.setChecked(Settings.getInstance().isDirection());
+        swDirection.setChecked(Settings.getInstance().isDirectionUp());
         swDirection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Settings.getInstance().setDirection(buttonView.isChecked());
+                Settings.getInstance().setDirectionUp(buttonView.isChecked());
             }
         });
     }
