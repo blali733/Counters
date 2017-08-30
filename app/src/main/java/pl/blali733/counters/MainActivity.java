@@ -40,6 +40,7 @@ import pl.blali733.counters.dialogs.CreatorDialog;
 import pl.blali733.counters.dialogs.SettingsDialog;
 import pl.blali733.counters.events.AuthFragment;
 import pl.blali733.counters.fragments.ListFragment;
+import pl.blali733.counters.storage.Settings;
 
 /**
  * Class servicing MainActivity.
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity
                 .build();
         //Firebase auth:
         mAuth = FirebaseAuth.getInstance();
+
+        Settings.getInstance().initializeSettings(this);
 
         toolbarCtx = findViewById(R.id.toolbar);
         setSupportActionBar(toolbarCtx);
