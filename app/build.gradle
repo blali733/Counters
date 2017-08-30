@@ -40,20 +40,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def name = 'counters-signed-'
-                    def ver = variant.versionName
-                    def outputDir = "./docs"
-
-                    def outName = name+ver+'.apk'
-
-                    output.outputFile = new File(outputDir, outName)
-                }
-            }
         }
         debug {
             applicationIdSuffix ".debug"
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (variant.buildType.name == "release") {
+                def name = 'counters-signed-'
+                def ver = variant.versionName
+                def outputDir = "./docs"
+
+                def outName = name + ver + '.apk'
+
+                output.outputFile = new File(outputDir, outName)
+            }
         }
     }
 }
