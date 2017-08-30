@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <Switch android:id="@+id/settings_scrolling_direction"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/direction_label"
+        android:textOn="@string/direction_up"
+        android:textOff="@string/direction_down"
+        android:textColor="@color/text"/>
+</LinearLayout>

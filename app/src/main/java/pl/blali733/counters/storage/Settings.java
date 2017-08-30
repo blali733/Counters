@@ -6,7 +6,7 @@ package pl.blali733.counters.storage;
  * @version 1.0
  * @since 0.5 app / 1.0 pkg
  */
-class Settings {
+public class Settings {
     /**
      * Instance of singleton.
      */
@@ -15,14 +15,14 @@ class Settings {
     /**
      * Direction of spinners.
      */
-    private static boolean direction;
+    private boolean direction = false;
 
     /**
      * Instance getter.
      * @return instance of singleton.
      * @since 1.0
      */
-    static Settings getInstance() {
+    public static Settings getInstance() {
         return ourInstance;
     }
 
@@ -30,8 +30,8 @@ class Settings {
      * Switcher of direction value.
      * @since 1.0
      */
-    public static void toggleDirection(){
-        direction = !direction;
+    public void setDirection(boolean direction){
+        this.direction = direction;
         persist();
     }
 
@@ -40,7 +40,7 @@ class Settings {
      * @return direction value.
      * @since 1.0
      */
-    public static boolean isDirection() {
+    public boolean isDirection() {
         return direction;
     }
 
@@ -49,7 +49,7 @@ class Settings {
      * @since 1.0
      */
     //TODO implement
-    private static void persist(){
+    private void persist(){
 
     }
 

@@ -36,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import pl.blali733.counters.dialogs.CreatorDialog;
+import pl.blali733.counters.dialogs.SettingsDialog;
 import pl.blali733.counters.events.AuthFragment;
 import pl.blali733.counters.fragments.ListFragment;
 
@@ -334,5 +336,28 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayoutCtx.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this,SettingsDialog.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

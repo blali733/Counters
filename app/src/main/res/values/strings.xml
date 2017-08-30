@@ -34,4 +34,7 @@
     <string name="save">Save</string>
     <string name="updateConfirm">Save</string>
     <string name="deleteConfirm">Delete</string>
+    <string name="direction_up">up</string>
+    <string name="direction_down">down</string>
+    <string name="direction_label">Scrolling direction:</string>
 </resources>

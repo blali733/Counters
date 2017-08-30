@@ -27,6 +27,9 @@
         </activity>
         <activity android:name=".dialogs.CreatorDialog" android:theme="@style/Base.Theme.AppCompat.Dialog" />
         <activity android:name=".dialogs.EditDialog" android:theme="@style/Base.Theme.AppCompat.Dialog" />
+        <activity android:name=".dialogs.SettingsDialog"
+            android:label="@string/action_settings"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b9e00e7b214bb96052d8a7e7ba07753dfaf13bc5" />
