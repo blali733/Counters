@@ -31,8 +31,8 @@ android {
         applicationId "pl.blali733.counters"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 7
-        versionName "0.5.2"
+        versionCode 8
+        versionName "0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
