@@ -1,8 +1,12 @@
 package pl.blali733.counters;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -35,6 +39,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import pl.blali733.counters.dialogs.CreatorDialog;
 import pl.blali733.counters.dialogs.SettingsDialog;
@@ -245,17 +250,36 @@ public class MainActivity extends AppCompatActivity
      */
     private void updateUI(FirebaseUser user) {
         Menu mMenu = navigationViewCtx.getMenu();
+        Target mTarget = new Target() {
+            @Override
+            public void onBitmapLoaded (final Bitmap bitmap, Picasso.LoadedFrom from){
+                RoundedBitmapDrawable round = RoundedBitmapDrawableFactory.create(getResources(),bitmap);
+                round.setCircular(true);
+                round.setCornerRadius(150);
+                userImage.setImageDrawable(round);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                userImage.setImageDrawable(errorDrawable);
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                userImage.setImageDrawable(placeHolderDrawable);
+            }
+        };
         if (user != null) {
             String mName = user.getDisplayName();
             nameText.setText(mName);
             mailText.setText(user.getEmail());
-            Picasso.with(getApplicationContext()).load(user.getPhotoUrl()).placeholder(android.R.drawable.sym_def_app_icon).into(userImage);
+            Picasso.with(getApplicationContext()).load(user.getPhotoUrl()).placeholder(android.R.drawable.sym_def_app_icon).into(mTarget);
             mMenu.findItem(R.id.log_in).setVisible(false);
             mMenu.findItem(R.id.log_out).setVisible(true);
         } else {
             nameText.setText(R.string.placeholderName);
             mailText.setText(R.string.placeholderMail);
-            Picasso.with(getApplicationContext()).load(android.R.drawable.sym_def_app_icon).placeholder(android.R.drawable.sym_def_app_icon).into(userImage);
+            Picasso.with(getApplicationContext()).load(android.R.drawable.sym_def_app_icon).placeholder(android.R.drawable.sym_def_app_icon).into(mTarget);
             mMenu.findItem(R.id.log_in).setVisible(true);
             mMenu.findItem(R.id.log_out).setVisible(false);
         }
