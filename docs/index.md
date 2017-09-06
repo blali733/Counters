@@ -1,4 +1,4 @@
-[Download current version counters.apk](counters-signed-0.5.2.apk)
+[Download current version of Counters (apk)](counters-signed-0.5.2.apk)
 * * *
 
 # [](#header-1)30.08.17 - v0.5.2
